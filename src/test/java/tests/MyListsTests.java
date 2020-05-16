@@ -21,7 +21,7 @@ public class MyListsTests extends CoreTestCase {
         SearchPageObject SearchPageObject = SearchPageObjectFactory.get(driver);
         SearchPageObject.initSearchInput();
         SearchPageObject.typeSearchLine("Java");
-        SearchPageObject.clickByArticleWihSubstring("Object-oriented programming language");
+        SearchPageObject.clickByArticleWithSubstring("Object-oriented programming language");
 
         ArticlePageObject ArticlePageObject = ArticlePageObjectFactory.get(driver);
         ArticlePageObject.waitForTitleElement();
@@ -61,7 +61,7 @@ public class MyListsTests extends CoreTestCase {
         SearchPageObject SearchPageObject = SearchPageObjectFactory.get(driver);
         SearchPageObject.initSearchInput(); // search first article
         SearchPageObject.typeSearchLine("Java");
-        SearchPageObject.clickByArticleWihSubstring("Object-oriented programming language");
+        SearchPageObject.clickByArticleWithSubstring("Object-oriented programming language");
 
         ArticlePageObject ArticlePageObject = ArticlePageObjectFactory.get(driver);
         ArticlePageObject.waitForTitleElement();
@@ -71,9 +71,22 @@ public class MyListsTests extends CoreTestCase {
         } else {
             ArticlePageObject.addArticlesToMySaved();
         }
+        if (Platform.getInstance().isMw()){
+            AuthorizationPageObject Auth = new AuthorizationPageObject(driver);
+            Auth.clickAuthButton();
+            Auth.enterLoginData(login, password);
+            Auth.submitForm();
+            ArticlePageObject.waitForTitleElement();
+            assertEquals(
+                    "We are not on the same page after login",
+                    first_article_title,
+                    ArticlePageObject.getArticleTitle()
+            );
+            ArticlePageObject.addArticlesToMySaved();
+        }
         ArticlePageObject.clickSearchButton(); // search second article
         SearchPageObject.typeSearchLine("Java");
-        SearchPageObject.clickByArticleWihSubstring("JavaScript");
+        SearchPageObject.clickByArticleWithSubstring("High-level programming language");
         ArticlePageObject.waitForTitleElement();
         String title_before_saving = ArticlePageObject.getArticleTitle(); //check second article title
         if(Platform.getInstance().isAndroid()){
@@ -84,6 +97,7 @@ public class MyListsTests extends CoreTestCase {
         ArticlePageObject.closeArticle();
 
         NavigationUI NavigationUI = NavigationUIFactory.get(driver); // go to my list
+        NavigationUI.openNavigation();
         NavigationUI.clickMyList();
 
         MyListsPageObject MyListsPageObject = MyListPageObjectFactory.get(driver);
@@ -91,14 +105,18 @@ public class MyListsTests extends CoreTestCase {
             MyListsPageObject.openFolderByName(name_of_folder); // open created folder
         }
         MyListsPageObject.swipeByArticleToDelete(first_article_title);  // delete first article
-        MyListsPageObject.openArticleByTitle(title_before_saving); // open second article
 
-        String title_after_saving = ArticlePageObject.getArticleTitle(); // get article title after saving
+        if (Platform.getInstance().isIOS() || Platform.getInstance().isAndroid()) {
+            MyListsPageObject.openArticleByTitle(title_before_saving); // open second article
+            String title_after_saving = ArticlePageObject.getArticleTitle(); // get article title after saving
+            assertEquals(
+                    "Title of saved article does not match title of open article",
+                    title_before_saving,
+                    title_after_saving
+            );
+        } else {
+            assertTrue("The second saved article is not in the saved", MyListsPageObject.isSavedArticle(title_before_saving));
+        }
 
-        assertEquals(
-                "Title of saved article does not match title of open article",
-                title_before_saving,
-                title_after_saving
-        );
     }
 }

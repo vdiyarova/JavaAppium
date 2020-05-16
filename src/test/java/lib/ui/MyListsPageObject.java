@@ -81,6 +81,11 @@ abstract public class MyListsPageObject extends MainPageObject{
         );
     }
 
+    public boolean isSavedArticle(String article_title){
+        String article_title_xpath = getArticleTitleXpath(article_title);
+        return  this.isElementPresent(article_title_xpath);
+    }
+
     public void openArticleByTitle(String article_title){
         String article_title_xpath = getArticleTitleXpath(article_title);
         this.waitForElementAndClick(
