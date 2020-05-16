@@ -2,6 +2,7 @@ package lib.ui;
 
 import io.appium.java_client.AppiumDriver;
 import org.openqa.selenium.WebElement;
+import org.openqa.selenium.remote.RemoteWebDriver;
 
 abstract public class SearchPageObject extends MainPageObject {
     protected static String
@@ -13,7 +14,7 @@ abstract public class SearchPageObject extends MainPageObject {
             EMPTY_RESULT_LABEL,
             SEARCH_INPUT_TEXT;
 
-    public SearchPageObject(AppiumDriver driver)
+    public SearchPageObject(RemoteWebDriver driver)
     {
         super(driver);
     }
@@ -35,7 +36,8 @@ abstract public class SearchPageObject extends MainPageObject {
         );
         this.waitForElementPresent(
                 SEARCH_INPUT,
-                "Cannot find search input after click"
+                "Cannot find search input after click",
+                5
         );
     }
 
@@ -52,7 +54,7 @@ abstract public class SearchPageObject extends MainPageObject {
         String search_result_xpath = getResultSearchElement(substring);
         this.waitForElementPresent(
                search_result_xpath,
-                "Cannot find search result with substring" + substring,
+                "Cannot find search result with substring: " + substring,
                 15
         );
     }
@@ -77,7 +79,7 @@ abstract public class SearchPageObject extends MainPageObject {
         this.waitForElementAndClick(
                 SEARCH_CANCEL_BUTTON,
                 "Cannot find and click to search button",
-                5
+                10
         );
     }
 
