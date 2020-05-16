@@ -83,7 +83,7 @@ abstract public class SearchPageObject extends MainPageObject {
         );
     }
 
-    public void clickByArticleWihSubstring(String substring){
+    public void clickByArticleWithSubstring(String substring){
         String search_result_xpath = getResultSearchElement(substring);
         this.waitForElementAndClick(
                 search_result_xpath,

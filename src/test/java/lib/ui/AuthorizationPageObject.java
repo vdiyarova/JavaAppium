@@ -17,22 +17,27 @@ public class AuthorizationPageObject extends MainPageObject {
         this.tryClickElementWithFewAttempts(
                 LOGIN_BUTTON,
                 "Cannot find and click login button",
-                10
+                5
         );
     }
 
     public void enterLoginData(String login, String password){
+        this.waitForElementPresent(
+                LOGIN_INPUT,
+                "Cannot find and put a login to the login input",
+                10
+        );
         this.waitForElementAndSendKeys(
                 LOGIN_INPUT,
                 login,
                 "Cannot find and put a login to the login input",
-                5
+                10
         );
         this.waitForElementAndSendKeys(
                 PASSWORD_INPUT,
                 password,
                 "Cannot find and put a password to the password input",
-                5
+                10
         );
     }
 
