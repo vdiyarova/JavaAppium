@@ -106,7 +106,7 @@ public class MyListsTests extends CoreTestCase {
         }
         MyListsPageObject.swipeByArticleToDelete(first_article_title);  // delete first article
 
-        if (Platform.getInstance().isIOS() || Platform.getInstance().isAndroid()) {
+        if (Platform.getInstance().isAndroid()) {
             MyListsPageObject.openArticleByTitle(title_before_saving); // open second article
             String title_after_saving = ArticlePageObject.getArticleTitle(); // get article title after saving
             assertEquals(
