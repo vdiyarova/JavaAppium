@@ -106,17 +106,6 @@ public class MyListsTests extends CoreTestCase {
         }
         MyListsPageObject.swipeByArticleToDelete(first_article_title);  // delete first article
 
-        if (Platform.getInstance().isAndroid()) {
-            MyListsPageObject.openArticleByTitle(title_before_saving); // open second article
-            String title_after_saving = ArticlePageObject.getArticleTitle(); // get article title after saving
-            assertEquals(
-                    "Title of saved article does not match title of open article",
-                    title_before_saving,
-                    title_after_saving
-            );
-        } else {
-            assertTrue("The second saved article is not in the saved", MyListsPageObject.isSavedArticle(title_before_saving));
-        }
-
+        assertTrue("The second saved article is not in the saved", MyListsPageObject.isSavedArticle(title_before_saving)); // check saved article in my saved
     }
 }
